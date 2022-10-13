@@ -9,3 +9,7 @@ type AccessToken struct {
 	ClientID    string
 	GrantType   string
 }
+
+func (a AccessToken) GetID() string {
+	return a.ID
+}

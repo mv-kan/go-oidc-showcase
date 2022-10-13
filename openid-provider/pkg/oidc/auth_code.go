@@ -9,3 +9,7 @@ type AuthCode struct {
 	Scope        []string
 	ResponseType []string
 }
+
+func (a AuthCode) GetID() string {
+	return a.ID
+}

@@ -5,3 +5,7 @@ type Client struct {
 	Secret      string
 	RedirectURI []string
 }
+
+func (c Client) GetID() string {
+	return c.ID
+}
