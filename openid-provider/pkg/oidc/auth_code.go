@@ -10,6 +10,6 @@ type AuthCode struct {
 	ResponseType []string
 }
 
-func (a AuthCode) GetID() ID {
-	return a.ID
+func (c AuthCode) GetID() ID {
+	return c.ID
 }

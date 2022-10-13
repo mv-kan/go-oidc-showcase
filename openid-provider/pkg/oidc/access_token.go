@@ -10,6 +10,6 @@ type AccessToken struct {
 	GrantType   string
 }
 
-func (a AccessToken) GetID() ID {
-	return a.ID
+func (t AccessToken) GetID() ID {
+	return t.ID
 }
