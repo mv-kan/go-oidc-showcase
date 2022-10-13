@@ -7,6 +7,8 @@ import "github.com/mv-kan/go-oidc-showcase/openid-provider/pkg/oidc"
 // is more clear than separation in code by passing
 // types
 type storage[T oidc.IDer] interface {
-	Get(id oidc.ID) T
-	GetAll() []T
+	Get(id oidc.ID) (T, error)
+	GetAll() ([]T, error)
+	Add(model T) error
+	Remove(id oidc.ID) error
 }
