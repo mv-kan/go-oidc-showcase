@@ -1,5 +1,6 @@
 package oidc
 
+type ID = string
 type IDer interface {
-	GetID() string
+	GetID() ID
 }

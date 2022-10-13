@@ -1,7 +1,7 @@
 package oidc
 
 type AuthCode struct {
-	ID string
+	ID ID
 	// http form params
 	ClientID     string
 	RedirectURI  string
@@ -10,6 +10,6 @@ type AuthCode struct {
 	ResponseType []string
 }
 
-func (a AuthCode) GetID() string {
+func (a AuthCode) GetID() ID {
 	return a.ID
 }

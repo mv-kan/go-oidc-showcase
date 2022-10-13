@@ -1,8 +1,8 @@
 package oidc
 
 type AccessToken struct {
-	ID     string
-	UserID string
+	ID     ID
+	UserID ID
 	// http form params
 	Code        string
 	RedirectURI string
@@ -10,6 +10,6 @@ type AccessToken struct {
 	GrantType   string
 }
 
-func (a AccessToken) GetID() string {
+func (a AccessToken) GetID() ID {
 	return a.ID
 }

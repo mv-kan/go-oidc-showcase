@@ -1,11 +1,11 @@
 package oidc
 
 type Client struct {
-	ID          string
+	ID          ID
 	Secret      string
 	RedirectURI []string
 }
 
-func (c Client) GetID() string {
+func (c Client) GetID() ID {
 	return c.ID
 }

@@ -1,10 +1,10 @@
 package oidc
 
 type User struct {
-	ID       string
+	ID       ID
 	Password string
 }
 
-func (u User) GetID() string {
+func (u User) GetID() ID {
 	return u.ID
 }
