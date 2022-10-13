@@ -1,0 +1,12 @@
+User can login in to its <account>
+All clients and account info is stored in <storage>
+<Client> has <ClientID> and <Client secret> and <RedirectURI> list
+<Client> makes auth request that redirects user to <OpenID Provider> 
+if user authenticates <OP> redirects it to <callback> link, this callback link contains <authorization code>
+<Client> makes token request to switch <authtoken> to <access token>
+<Client> makes request with <access token> to <Resource server>
+<Resource Server> check validity of <access token>
+each <access token> is binded to <account>
+
+Ubiquitous Language: User, Client, Storage, RedirectURI, OpenID Proviver, access token, authcode, Resource Server, callback
+
