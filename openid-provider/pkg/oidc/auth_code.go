@@ -4,7 +4,7 @@ type AuthCode struct {
 	ID     ID
 	UserID ID
 	// http form params
-	ClientID     string
+	ClientID     ID
 	RedirectURI  string
 	State        string
 	Scope        []string

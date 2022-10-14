@@ -22,7 +22,7 @@ type modelStorage[T oidc.IDer] struct {
 	models []T
 }
 
-func (s modelStorage[T]) Get(id oidc.ID) (T, error) {
+func (s *modelStorage[T]) Get(id oidc.ID) (T, error) {
 	for _, model := range s.models {
 		if model.GetID() == id {
 			return model, nil
@@ -33,16 +33,16 @@ func (s modelStorage[T]) Get(id oidc.ID) (T, error) {
 	return tmp, ErrNotFound
 }
 
-func (s modelStorage[T]) GetAll() ([]T, error) {
+func (s *modelStorage[T]) GetAll() ([]T, error) {
 	return s.models, nil
 }
 
-func (s modelStorage[T]) Add(model T) error {
+func (s *modelStorage[T]) Add(model T) error {
 	s.models = append(s.models, model)
 	return nil
 }
 
-func (s modelStorage[T]) Remove(id oidc.ID) error {
+func (s *modelStorage[T]) Remove(id oidc.ID) error {
 	for index, model := range s.models {
 		if model.GetID() == id {
 			s.models = remove(s.models, index)

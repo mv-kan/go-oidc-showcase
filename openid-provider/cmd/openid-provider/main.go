@@ -80,8 +80,8 @@ func run() {
 	// get router
 	r := router.New(httpconf, authCtrl, loginCtrl, tokenCtrl)
 
+	logger.Info("run server on " + httpconf.OPHost)
 	http.ListenAndServe(httpconf.OPHost, r)
-	logger.Info("file and console log testing message")
 }
 
 func main() {
