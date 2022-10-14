@@ -1,7 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"github.com/mv-kan/go-oidc-showcase/openid-provider/pkg/log"
+)
 
 func main() {
-	fmt.Println("Hello, World!")
+	// test logging
+	log.Info("Testing message")
 }
