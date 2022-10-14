@@ -5,9 +5,11 @@ package utils
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"net/url"
 
+	"github.com/google/uuid"
 	"github.com/mv-kan/go-oidc-showcase/openid-provider/pkg/oidc"
 	"github.com/mv-kan/go-oidc-showcase/openid-provider/pkg/storage"
 )
@@ -95,4 +97,52 @@ func ResponseJSON(w http.ResponseWriter, code int, payload any) error {
 	w.WriteHeader(code)
 	w.Write(response)
 	return nil
+}
+
+func WriteResponse(w http.ResponseWriter, code int, message string) {
+	w.WriteHeader(code)
+	w.Write([]byte(message))
+}
+
+func CheckUsernamePassword(userStorage storage.User, requestStorage storage.AuthRequest, username, password, authReqID string) error {
+	_, err := requestStorage.Get(authReqID)
+	if errors.Is(storage.ErrNotFound, err) {
+		return fmt.Errorf("there is no such authorization request")
+	} else if err != nil {
+		return err
+	}
+
+	//for demonstration purposes we'll check on a static list with plain text password
+	//for real world scenarios, be sure to have the password hashed and salted (e.g. using bcutils
+	users, err := userStorage.GetAll()
+	if err != nil {
+		return err
+	}
+	for _, user := range users {
+		if user.ID == username && user.Password == password {
+			return nil
+		}
+	}
+	return fmt.Errorf("username or password wrong")
+}
+
+// add auth code obj to auth code storage and returns new created auth code
+// delete auth request and get auth code
+func GenerateAuthCode(requestStorage storage.AuthRequest, authCodeStorage storage.AuthCode, authReq oidc.AuthRequest) (oidc.AuthCode, error) {
+	_, err := requestStorage.Get(authReq.GetID())
+	if err != nil {
+		return oidc.AuthCode{}, err
+	}
+	randID := uuid.New().String()
+
+	authCode := oidc.AuthCode{ID: randID, ClientID: authReq.ClientID, Scope: authReq.Scope, RedirectURI: authReq.RedirectURI, State: authReq.State}
+	err = requestStorage.Remove(authReq.GetID())
+	if err != nil {
+		return authCode, err
+	}
+	err = authCodeStorage.Add(authCode)
+	if err != nil {
+		return authCode, err
+	}
+	return authCode, nil
 }
