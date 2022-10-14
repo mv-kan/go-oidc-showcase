@@ -11,4 +11,4 @@ each <access token> is binded to <account>
 Ubiquitous Language: User, Client, Storage, RedirectURI, OpenID Proviver, access token, authcode, Resource Server, callback
 
 TODO
-add loggin (god dammit)
+add .well-known/openid-provider
