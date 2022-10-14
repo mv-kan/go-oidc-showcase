@@ -1,10 +1,11 @@
 package oidc
 
 type AccessToken struct {
+	// ID is access token in http json response
 	ID     ID
 	UserID ID
 	// http form params
-	Code        string
+	Scopes      []string
 	RedirectURI string
 	ClientID    string
 	GrantType   string

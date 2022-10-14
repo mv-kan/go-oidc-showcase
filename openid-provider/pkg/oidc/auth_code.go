@@ -1,7 +1,8 @@
 package oidc
 
 type AuthCode struct {
-	ID ID
+	ID     ID
+	UserID ID
 	// http form params
 	ClientID     string
 	RedirectURI  string

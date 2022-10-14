@@ -146,3 +146,30 @@ func GenerateAuthCode(requestStorage storage.AuthRequest, authCodeStorage storag
 	}
 	return authCode, nil
 }
+
+// Requires authRequest obj, deletes it and add generated token into token storage
+func SwitchCodeToToken(authCodeStorage storage.AuthCode, tokenStorage storage.AccessToken, authCode oidc.AuthCode, redirectURI string, grantType string) (oidc.AccessToken, error) {
+	// check auth code existance
+	_, err := authCodeStorage.Get(authCode.GetID())
+	if err != nil {
+		return oidc.AccessToken{}, err
+	}
+	// add random id, scopes, and cliend id to token
+	accessToken := uuid.New()
+	scopes := authCode.Scope
+	clientID := authCode.ClientID
+	// add token to token storage
+	token := oidc.AccessToken{ID: accessToken.String(), Scopes: scopes, ClientID: clientID, RedirectURI: redirectURI, GrantType: grantType, UserID: authCode.UserID}
+
+	// remove auth req from storage and add token
+	err = authCodeStorage.Remove(authCode.GetID())
+	if err != nil {
+		return token, err
+	}
+	err = tokenStorage.Add(token)
+	if err != nil {
+		return token, err
+	}
+	// and return it
+	return token, nil
+}
