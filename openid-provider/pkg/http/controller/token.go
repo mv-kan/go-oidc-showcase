@@ -3,10 +3,12 @@ package controller
 import (
 	"net/http"
 
+	"github.com/mv-kan/go-oidc-showcase/openid-provider/pkg/log"
 	"github.com/mv-kan/go-oidc-showcase/openid-provider/pkg/storage"
 )
 
 type Token struct {
+	logger          log.Logger
 	authCodeStorage storage.AuthCode
 	clientStorage   storage.Client
 	tokenStorage    storage.AccessToken

@@ -5,4 +5,6 @@ type HTTP struct {
 	LoginEndpoint      string
 	TokenEndpoint      string
 	CheckTokenEndpoint string
+	OPHost             string
+	OPURL              string
 }
