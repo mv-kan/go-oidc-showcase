@@ -19,6 +19,10 @@ type Token struct {
 	tokenStorage    storage.AccessToken
 }
 
+func NewToken(logger log.Logger, authCodeStorage storage.AuthCode, clientStorage storage.Client, tokenStorage storage.AccessToken) Token {
+	return Token{logger: logger, authCodeStorage: authCodeStorage, clientStorage: clientStorage, tokenStorage: tokenStorage}
+}
+
 func (t Token) SwitchCodeToToken(w http.ResponseWriter, r *http.Request) {
 	// authorization code check
 	err := r.ParseForm()

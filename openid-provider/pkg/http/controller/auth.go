@@ -20,6 +20,10 @@ type Auth struct {
 	clientStorage  storage.Client
 }
 
+func NewAuth(logger log.Logger, httpconf config.HTTP, requestStorage storage.AuthRequest, clientStorage storage.Client) Auth {
+	return Auth{logger: logger, httpconf: httpconf, requestStorage: requestStorage, clientStorage: clientStorage}
+}
+
 func (a Auth) Auth(w http.ResponseWriter, r *http.Request) {
 
 	params := r.URL.Query()

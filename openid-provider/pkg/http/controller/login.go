@@ -46,6 +46,10 @@ type Login struct {
 	authCodeStorage storage.AuthCode
 }
 
+func NewLogin(logger log.Logger, userStorage storage.User, requestStorage storage.AuthRequest, authCodeStorage storage.AuthCode) Login {
+	return Login{logger: logger, userStorage: userStorage, requestStorage: requestStorage, authCodeStorage: authCodeStorage}
+}
+
 func (l Login) Login(w http.ResponseWriter, r *http.Request) {
 	params := r.URL.Query()
 	authReqIDs, ok := params["authRequestID"]
