@@ -15,6 +15,6 @@ func New(conf config.HTTP, authCtrl controller.Auth, loginCtrl controller.Login,
 	r.HandleFunc(conf.LoginEndpoint, loginCtrl.Login).Methods(http.MethodGet)
 	r.HandleFunc(conf.LoginEndpoint, loginCtrl.CheckLogin).Methods(http.MethodPost)
 	r.HandleFunc(conf.TokenEndpoint, tokenCtrl.SwitchCodeToToken).Methods(http.MethodPost)
-	r.HandleFunc(conf.CheckTokenEndpoint, tokenCtrl.CheckToken).Methods(http.MethodGet)
+	r.HandleFunc(conf.CheckTokenEndpoint, tokenCtrl.CheckToken).Methods(http.MethodPost)
 	return r
 }
