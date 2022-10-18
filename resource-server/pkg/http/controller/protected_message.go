@@ -1,26 +1,33 @@
 package controller
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/url"
 	"strings"
 
+	"github.com/mv-kan/go-oidc-showcase/openid-provider/pkg/http/response"
 	"github.com/mv-kan/go-oidc-showcase/openid-provider/pkg/log"
 	"github.com/mv-kan/go-oidc-showcase/resource-server/pkg/config"
 	"github.com/mv-kan/go-oidc-showcase/resource-server/pkg/http/utils"
 )
 
 type ProtectedMessage struct {
-	OP config.OP
+	opconf config.OP
+	logger log.Logger
 }
 
+func NewProtectedMessage(logger log.Logger, opconf config.OP) ProtectedMessage {
+	return ProtectedMessage{logger: logger, opconf: opconf}
+}
 func (m ProtectedMessage) GetProtectedSuperSecret(w http.ResponseWriter, r *http.Request) {
 	bearerToken := r.Header.Get("Authorization")
 
 	// get token without bearer
 	tmp := strings.Split(bearerToken, "Bearer ")
 	if len(tmp) != 2 {
-		log.Error("invalid authorization header")
+		m.logger.Error("invalid authorization header")
 		utils.WriteResponse(w, http.StatusBadRequest, "invalid authorization header")
 		return
 	}
@@ -28,38 +35,49 @@ func (m ProtectedMessage) GetProtectedSuperSecret(w http.ResponseWriter, r *http
 
 	// check token
 	// send token to server
-	checkTokenURL, err := url.JoinPath(m.OP.URL, m.OP.CheckTokenEndpoint)
+	checkTokenURL, err := url.JoinPath(m.opconf.URL, m.opconf.CheckTokenEndpoint)
 	if err != nil {
-		log.Error(err.Error())
+		m.logger.Error(err.Error())
 		utils.WriteResponse(w, http.StatusInternalServerError, "internal error")
 	}
 
-	// get response
-	//one-line post request/response...
-	response, err := http.PostForm(checkTokenURL, url.Values{
+	// get resp
+	//one-line post request/resp...
+	resp, err := http.PostForm(checkTokenURL, url.Values{
 		"token": {token},
 	})
 
 	//okay, moving on...
 	if err != nil {
 		//handle postform error
-		log.Error(err.Error())
+		m.logger.Error(err.Error())
 		utils.WriteResponse(w, http.StatusInternalServerError, "internal server error")
 		return
 	}
 
-	defer response.Body.Close()
+	defer resp.Body.Close()
 	// body, err := ioutil.ReadAll(response.Body)
 
 	// if err != nil {
 	// 	//handle read response error
-	// 	log.Error(err.Error())
+	// 	m.logger.Error(err.Error())
 	// 	utils.WriteResponse(w, http.StatusInternalServerError, "internal server error")
 	// 	return
 	// }
-	if response.StatusCode != http.StatusOK {
-		log.Info("access denied, access token is not valid")
+	if resp.StatusCode != http.StatusOK {
+		m.logger.Info("access denied, access token is not valid")
 		utils.WriteResponse(w, http.StatusUnauthorized, "access token is not valid")
 		return
 	}
+	jsonResponse := response.CheckToken{}
+	if err := json.NewDecoder(resp.Body).Decode(&jsonResponse); err != nil {
+		m.logger.Error(err.Error())
+		utils.WriteResponse(w, http.StatusInternalServerError, "internal server error")
+		return
+	}
+
+	accessToken := jsonResponse.AccessToken
+	userID := jsonResponse.Username
+
+	utils.WriteResponse(w, http.StatusOK, fmt.Sprintf("Hello %s, this is a secret message and your access token is %s", userID, accessToken))
 }

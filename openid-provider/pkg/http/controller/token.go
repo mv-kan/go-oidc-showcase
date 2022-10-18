@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mv-kan/go-oidc-showcase/openid-provider/pkg/http/response"
 	"github.com/mv-kan/go-oidc-showcase/openid-provider/pkg/http/utils"
 	"github.com/mv-kan/go-oidc-showcase/openid-provider/pkg/log"
 	"github.com/mv-kan/go-oidc-showcase/openid-provider/pkg/storage"
@@ -113,11 +114,11 @@ func (t Token) SwitchCodeToToken(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Pragma", "no-cache")
 	w.Header().Add("Cache-Control", "no-store")
 
-	msg := map[string]any{
-		"access_token": token.ID,
-		"token_type":   "Bearer",
-		"expires_in":   99999999,
-		"id_token":     token.GetID(),
+	msg := response.GrantToken{
+		AccessToken: token.ID,
+		TokenType:   "Bearer",
+		ExpiresIn:   9999999,
+		IDToken:     token.ID,
 	}
 	err = utils.ResponseJSON(w, http.StatusOK, msg)
 	if err != nil {
@@ -149,9 +150,9 @@ func (t Token) CheckToken(w http.ResponseWriter, r *http.Request) {
 	}
 	// yes I do understand that we don't use scopes at all
 	// but this project is for example and learning reasons
-	response := map[string]string{
-		"access_token": token.ID,
-		"username":     token.UserID,
+	response := response.CheckToken{
+		AccessToken: token.ID,
+		Username:    token.UserID,
 	}
 	utils.ResponseJSON(w, http.StatusOK, response)
 }
