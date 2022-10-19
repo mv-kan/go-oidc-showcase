@@ -20,6 +20,7 @@ const (
 	ClientRedirectURI = "CLIENT_REDIRECT_URI"
 
 	// relying party
+	RPURL            = "RP_URL"
 	RPHost           = "RP_HOST"
 	IndexEndpoint    = "RP_INDEX_ENDPOINT"
 	CallbackEndpoint = "RP_CALLBACK_ENDPOINT"
@@ -53,6 +54,7 @@ func run() {
 	}
 	httpconf := config.HTTP{
 		RPHost:           os.Getenv(RPHost),
+		RPURL:            os.Getenv(RPURL),
 		IndexEndpoint:    os.Getenv(IndexEndpoint),
 		CallbackEndpoint: os.Getenv(CallbackEndpoint),
 	}

@@ -80,5 +80,11 @@ func (c Callback) GetToken(w http.ResponseWriter, r *http.Request) {
 	}
 	json.Unmarshal(jsonBytes, &tokenResponse)
 	utils.SetCookie(w, "token", tokenResponse.AccessToken)
-	http.Redirect(w, r, c.httpconf.RPHost, http.StatusFound)
+	homeURL, err := url.JoinPath(c.httpconf.RPURL, c.httpconf.IndexEndpoint)
+	if err != nil {
+		c.logger.Error(err.Error())
+		http.Error(w, "internal server error", http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, homeURL, http.StatusFound)
 }
