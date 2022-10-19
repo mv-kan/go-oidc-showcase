@@ -13,9 +13,10 @@ import (
 )
 
 const (
-	CheckTokenEndpoint = "CHECK_TOKEN_ENDPOINT"
+	CheckTokenEndpoint = "OP_CHECK_TOKEN_ENDPOINT"
 	OPURL              = "OP_URL"
 
+	RSHost      = "RS_HOST"
 	LogFilePath = "LOG_FILEPATH"
 )
 
@@ -49,7 +50,7 @@ func run() {
 	// get router
 	r := router.New(messageCtrl)
 
-	rsHost := os.Getenv("RS_HOST")
+	rsHost := os.Getenv(RSHost)
 	logger.Info("run server on " + rsHost)
 	http.ListenAndServe(rsHost, r)
 }

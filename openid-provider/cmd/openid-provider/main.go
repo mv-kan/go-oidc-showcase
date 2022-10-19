@@ -16,10 +16,10 @@ import (
 
 // env keys names
 const (
-	AuthEndpoint       = "AUTH_ENDPOINT"
-	LoginEndpoint      = "LOGIN_ENDPOINT"
-	TokenEndpoint      = "TOKEN_ENDPOINT"
-	CheckTokenEndpoint = "CHECK_TOKEN_ENDPOINT"
+	AuthEndpoint       = "OP_AUTH_ENDPOINT"
+	LoginEndpoint      = "OP_LOGIN_ENDPOINT"
+	TokenEndpoint      = "OP_TOKEN_ENDPOINT"
+	CheckTokenEndpoint = "OP_CHECK_TOKEN_ENDPOINT"
 	OPHost             = "OP_HOST"
 	OPURL              = "OP_URL"
 
