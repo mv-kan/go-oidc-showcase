@@ -50,42 +50,7 @@ func (i Index) GetMessage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// if token exists send token to protected resource and send message from this resource
-	url, err := url.JoinPath(i.rsconf.URL, i.rsconf.ProtectedEndpoint)
-	if err != nil {
-		i.logger.Error(err.Error())
-		http.Error(w, "internal server error", http.StatusInternalServerError)
-		return
-	}
-	// Create a Bearer string by appending string access token
-	var bearer = "Bearer " + token
-	// Create a new request using http
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		i.logger.Error(err.Error())
-		http.Error(w, "internal server error", http.StatusInternalServerError)
-		return
-	}
-	// add authorization header to the req
-	req.Header.Add("Authorization", bearer)
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		i.logger.Error(err.Error())
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		i.logger.Error(err.Error())
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	responseBody := []byte("Message from protected server: ")
-	responseBody = append(responseBody, body...)
-	w.Write(responseBody)
-	//i.writeProtectedInfo(token, w, r)
+	i.writeProtectedInfo(token, w, r)
 }
 func (i Index) writeProtectedInfo(token string, w http.ResponseWriter, r *http.Request) {
 
