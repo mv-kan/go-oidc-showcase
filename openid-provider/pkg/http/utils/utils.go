@@ -128,14 +128,14 @@ func CheckUsernamePassword(userStorage storage.User, requestStorage storage.Auth
 
 // add auth code obj to auth code storage and returns new created auth code
 // delete auth request and get auth code
-func GenerateAuthCode(requestStorage storage.AuthRequest, authCodeStorage storage.AuthCode, authReq oidc.AuthRequest) (oidc.AuthCode, error) {
+func GenerateAuthCode(requestStorage storage.AuthRequest, authCodeStorage storage.AuthCode, authReq oidc.AuthRequest, username string) (oidc.AuthCode, error) {
 	_, err := requestStorage.Get(authReq.GetID())
 	if err != nil {
 		return oidc.AuthCode{}, err
 	}
 	randID := uuid.New().String()
 
-	authCode := oidc.AuthCode{ID: randID, ClientID: authReq.ClientID, Scope: authReq.Scope, RedirectURI: authReq.RedirectURI, State: authReq.State}
+	authCode := oidc.AuthCode{ID: randID, ClientID: authReq.ClientID, Scope: authReq.Scope, RedirectURI: authReq.RedirectURI, State: authReq.State, UserID: username}
 	err = requestStorage.Remove(authReq.GetID())
 	if err != nil {
 		return authCode, err

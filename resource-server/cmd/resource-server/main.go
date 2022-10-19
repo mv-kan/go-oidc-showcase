@@ -21,7 +21,7 @@ const (
 
 func run() {
 	// load env file
-	err := godotenv.Load("op.env")
+	err := godotenv.Load("rs.env")
 	if err != nil {
 		log.Fatal(err.Error())
 	}

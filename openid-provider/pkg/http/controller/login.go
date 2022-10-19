@@ -95,8 +95,7 @@ func (l Login) CheckLogin(w http.ResponseWriter, r *http.Request) {
 		renderLogin(l.logger, w, id, err)
 		return
 	}
-	authCode, err := utils.GenerateAuthCode(l.requestStorage, l.authCodeStorage, authReq)
-	authCode.UserID = username
+	authCode, err := utils.GenerateAuthCode(l.requestStorage, l.authCodeStorage, authReq, username)
 	if err != nil {
 		log.Debug(err.Error())
 		renderLogin(l.logger, w, id, err)
